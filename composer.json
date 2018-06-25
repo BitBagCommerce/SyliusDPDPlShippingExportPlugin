@@ -1,13 +1,9 @@
 {
-    "name": "bitbag/dhl24-pl-shipping-export-plugin",
+    "name": "bitbag/dpd-pl-shipping-export-plugin",
     "type": "sylius-plugin",
-    "description": "DHL24 PL shipping export plugin for Sylius based applications.",
+    "description": "DPD PL shipping export plugin for Sylius based applications.",
     "license": "MIT",
     "authors": [
-        {
-            "name": "Mikołaj Król",
-            "email": "mikolaj.krol@bitbag.pl"
-        },
         {
             "name": "Damian Murawski",
             "email": "damian.murawski@bitbag.pl"
@@ -37,8 +33,8 @@
     },
     "autoload": {
         "psr-4": {
-            "BitBag\\Dhl24PlShippingExportPlugin\\": "src/",
-            "Tests\\BitBag\\Dhl24PlShippingExportPlugin\\": "tests/"
+            "BitBag\\DpdPlShippingExportPlugin\\": "src/",
+            "Tests\\BitBag\\DpdPlShippingExportPlugin\\": "tests/"
         }
     },
     "config": {
