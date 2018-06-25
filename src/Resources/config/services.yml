@@ -1,0 +1,19 @@
+services:
+    bitbag.dpd_pl_shipping_export_plugin.form.type.dpd_shipping_gateway:
+        class: BitBag\DpdPlShippingExportPlugin\Form\Type\ShippingGatewayType
+        tags:
+            - { name: bitbag.shipping_gateway_configuration_type, type: 'dpd_pl', label: "DPD PL" }
+
+    bitbag.dpd_pl_shipping_export_plugin.event_listener.dpd_shipping_export:
+        class: BitBag\DpdPlShippingExportPlugin\EventListener\ShippingExportEventListener
+        arguments:
+            - '@bitbag.dpd_pl_shipping_export_plugin.api.web_client'
+            - '@bitbag.dpd_pl_shipping_export_plugin.api.soap_client'
+        tags:
+            - { name: kernel.event_listener, event: 'bitbag.export_shipment', method: exportShipment }
+
+    bitbag.dpd_pl_shipping_export_plugin.api.web_client:
+        class: BitBag\DpdPlShippingExportPlugin\Api\WebClient
+
+    bitbag.dpd_pl_shipping_export_plugin.api.soap_client:
+        class: BitBag\DpdPlShippingExportPlugin\Api\SoapClient

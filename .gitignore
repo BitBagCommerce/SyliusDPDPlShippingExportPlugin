@@ -1,0 +1,11 @@
+/bin/*
+!/bin/.gitkeep
+
+/vendor/
+/node_modules/
+/.idea
+
+/etc/build/*
+!/etc/build/.gitkeep
+
+/tests/Application/shipping_labels/*

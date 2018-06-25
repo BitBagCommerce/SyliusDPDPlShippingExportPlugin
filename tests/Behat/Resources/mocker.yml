@@ -1,0 +1,5 @@
+services:
+    bitbag.dpd_pl_shipping_export_plugin.behat.mocker.dpd_api_mocker:
+        class: Tests\BitBag\DpdPlShippingExportPlugin\Behat\Mocker\DPDApiMocker
+        arguments:
+            - '@sylius.behat.mocker'
