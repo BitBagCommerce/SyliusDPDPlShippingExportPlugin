@@ -47,7 +47,12 @@ final class ShippingExportEventListener
         $this->webClient->setShipment($shipment);
 
         try {
-            $dpd = new DPDService();
+            $dpd = new DPDService(
+                $shippingGateway->getConfigValue('id'),
+                $shippingGateway->getConfigValue('login'),
+                $shippingGateway->getConfigValue('password'),
+                $shippingGateway->getConfigValue('wsdl')
+            );
 
             $dpd->setSender($this->webClient->getSender());
 

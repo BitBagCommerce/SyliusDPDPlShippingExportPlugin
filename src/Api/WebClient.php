@@ -96,7 +96,7 @@ final class WebClient implements WebClientInterface
         if ($this->isCashOnDelivery()) {
             return [
                 'cod' => [
-                    'amount' => $this->getOrder()->getTotal(),
+                    'amount' => $this->getOrder()->getTotal() / 100,
                     'currency' => 'PLN',
                 ],
             ];
