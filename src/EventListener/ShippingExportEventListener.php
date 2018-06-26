@@ -5,10 +5,8 @@ namespace BitBag\DpdPlShippingExportPlugin\EventListener;
 use BitBag\DpdPlShippingExportPlugin\Api\SoapClientInterface;
 use BitBag\DpdPlShippingExportPlugin\Api\WebClientInterface;
 use BitBag\SyliusShippingExportPlugin\Event\ExportShipmentEvent;
+use DPD\Services\DPDService;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- */
 final class ShippingExportEventListener
 {
     const DPD_GATEWAY_CODE = 'dpd_pl';
@@ -44,13 +42,30 @@ final class ShippingExportEventListener
         }
 
         $shipment = $shippingExport->getShipment();
+
         $this->webClient->setShippingGateway($shippingGateway);
         $this->webClient->setShipment($shipment);
 
         try {
-            $requestData = $this->webClient->getRequestData();
+            $dpd = new DPDService();
 
-            $response = $this->soapClient->createShipment($requestData, $shippingGateway->getConfigValue('wsdl'));
+            $dpd->setSender($this->webClient->getSender());
+
+            $result = $dpd->sendPackage($this->webClient->getParcels(), $this->webClient->getReceiver(), 'SENDER', $this->webClient->getServices());
+
+            $speedlabel = $dpd->generateSpeedLabelsByPackageIds([$result->packageId], $this->webClient->getPickupAddress());
+
+            $protocol = $dpd->generateProtocolByPackageIds([$result->packageId], $this->webClient->getPickupAddress());
+
+            $dpd->pickupRequest(
+                [$protocol->documentId],
+                $this->webClient->getPickupDate(),
+                $this->webClient->getPickupTimeFrom(),
+                $this->webClient->getPickupTimeTo(),
+                $this->webClient->getContactInfo(),
+                $this->webClient->getPickupAddress()
+            );
+
         } catch (\Exception $exception) {
             $exportShipmentEvent->addErrorFlash(sprintf(
                 "DPD Web Service for #%s order: %s",
@@ -60,14 +75,7 @@ final class ShippingExportEventListener
             return;
         }
 
-        $labelContent = base64_decode($response->createShipmentResult->label->labelContent);
-        $extension = self::BASE_LABEL_EXTENSION;
-
-        if ($response->createShipmentResult->label->labelType === 'ZBLP') {
-            $extension = 'zpl';
-        }
-
-        $exportShipmentEvent->saveShippingLabel($labelContent, $extension);
+        $exportShipmentEvent->saveShippingLabel($speedlabel->filedata, 'pdf');
         $exportShipmentEvent->addSuccessFlash();
         $exportShipmentEvent->exportShipment();
     }

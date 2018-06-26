@@ -5,9 +5,6 @@ namespace BitBag\DpdPlShippingExportPlugin\Api;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- */
 interface WebClientInterface
 {
     /**
@@ -24,8 +21,4 @@ interface WebClientInterface
      */
     public function setShipment(ShipmentInterface $shipment);
 
-    /**
-     * @return array
-     */
-    public function getRequestData();
 }

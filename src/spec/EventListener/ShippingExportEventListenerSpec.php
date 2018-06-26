@@ -12,9 +12,6 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Core\Model\ShipmentInterface;
 
-/**
- * @author Patryk Drapik <patryk.drapik@bitbag.pl>
- */
 final class ShippingExportEventListenerSpec extends ObjectBehavior
 {
     function it_is_initializable()

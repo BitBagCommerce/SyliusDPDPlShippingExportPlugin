@@ -3,16 +3,10 @@
 namespace BitBag\DpdPlShippingExportPlugin\Api;
 
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
-use Sylius\Component\Core\Model\AddressInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
-use Webmozart\Assert\Assert;
 
-/**
- * @author Mikołaj Król <mikolaj.krol@bitbag.pl>
- * @author Damian Murawski <damian.murawski@bitbag.pl>
- */
 final class WebClient implements WebClientInterface
 {
     const DATE_FORMAT = 'Y-m-d';
@@ -43,20 +37,121 @@ final class WebClient implements WebClientInterface
         $this->shipment = $shipment;
     }
 
+
     /**
-     * {@inheritdoc}
+     * @return array
      */
-    public function getRequestData()
+    public function getSender()
     {
         return [
-            'authData' => $this->getAuthData(),
-            'shipment' => [
+            'fid' => $this->getShippingGatewayConfig('id'),
+            'name' => $this->getShippingGatewayConfig('name'),
+            'company' => $this->getShippingGatewayConfig('company'),
+            'address' => $this->getShippingGatewayConfig('address'),
+            'city' => $this->getShippingGatewayConfig('city'),
+            'postalCode' => $this->getShippingGatewayConfig('postal_code'),
+            'countryCode' => 'PL',
+            'email' => $this->getShippingGatewayConfig('email'),
+            'phone' => $this->getShippingGatewayConfig('phone_number'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getReceiver()
+    {
+        $shippingAddress = $this->getOrder()->getShippingAddress();
+
+        return [
+            'company' => $shippingAddress->getCompany(),
+            'name' => $shippingAddress->getFullName(),
+            'address' => $shippingAddress->getStreet(),
+            'city' => $shippingAddress->getCity(),
+            'postalCode' => str_replace('-', '', $shippingAddress->getPostcode()),
+            'countryCode' => 'PL',
+            'phone' => $shippingAddress->getPhoneNumber(),
+            'email' => '',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getParcels()
+    {
+        return [
+            0 => [
                 'content' => $this->getContent(),
-                'shipmentInfo' => $this->getShipmentInfo(),
-                'pieceList' => $this->getPieceList(),
-                'ship' => $this->getShip(),
+                'weight' => $this->shipment->getShippingWeight(),
             ],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getServices()
+    {
+        if ($this->isCashOnDelivery()) {
+            return [
+                'cod' => [
+                    'amount' => $this->getOrder()->getTotal(),
+                    'currency' => 'PLN',
+                ],
+            ];
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getPickupAddress()
+    {
+        return [
+            'fid' => $this->getShippingGatewayConfig('id'),
+//            'name' => 'NAME',
+//            'company' => 'COMPANY',
+//            'address' => 'ADDRESS',
+//            'city' => 'CITY',
+//            'postalCode' => '85132',
+//            'countryCode' => 'PL',
+//            'email'=> 'test@test.test',
+//            'phone' => '777888999',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getContactInfo()
+    {
+        return [
+            'name' => $this->getShippingGatewayConfig('name'),
+            'company' => $this->getShippingGatewayConfig('company'),
+            'email' => $this->getShippingGatewayConfig('email'),
+            'phone' => $this->getShippingGatewayConfig('phone_number'),
+        ];
+    }
+
+    public function getPickupDate(): string
+    {
+        return $this->resolvePickupDate();
+    }
+
+    public function getPickupTimeFrom(): string
+    {
+
+        return $this->getShippingGatewayConfig('shipment_start_hour');
+    }
+
+    /**
+     * @return array
+     */
+    public function getPickupTimeTo(): string
+    {
+
+        return $this->getShippingGatewayConfig('shipment_end_hour');
     }
 
     /**
@@ -68,22 +163,11 @@ final class WebClient implements WebClientInterface
     }
 
     /**
-     * @return array
-     */
-    private function getAuthData()
-    {
-        return [
-            'username' => $this->shippingGateway->getConfigValue('login'),
-            'password' => $this->shippingGateway->getConfigValue('password'),
-        ];
-    }
-
-    /**
      * @return string
      */
     private function getContent()
     {
-        $content = "";
+        $content = '';
 
         /** @var OrderItemInterface $item */
         foreach ($this->getOrder()->getItems() as $item) {
@@ -102,106 +186,6 @@ final class WebClient implements WebClientInterface
         return substr($content, 0, 30);
     }
 
-    /**
-     * @return array
-     */
-    private function getShipmentInfo()
-    {
-        $shipmentInfo = [
-            'dropOffType' => $this->getShippingGatewayConfig('drop_off_type'),
-            'serviceType' => $this->getShippingGatewayConfig('service_type'),
-            'labelType' => $this->getShippingGatewayConfig('label_type'),
-            'billing' => [
-                'shippingPaymentType' => $this->getShippingGatewayConfig('shipping_payment_type'),
-                'billingAccountNumber' => $this->getShippingGatewayConfig('billing_account_number'),
-                'paymentType' => $this->getShippingGatewayConfig('payment_type'),
-            ],
-            'shipmentTime' => [
-                'shipmentDate' => $this->resolvePickupDate(),
-                'shipmentStartHour' => $this->getShippingGatewayConfig('shipment_start_hour'),
-                'shipmentEndHour' => $this->getShippingGatewayConfig('shipment_end_hour'),
-            ],
-        ];
-
-        if (true === $this->isCashOnDelivery()) {
-            $shipmentInfo['specialServices'] = $this->resolveSpecialServices();
-        }
-
-        return $shipmentInfo;
-    }
-
-    /**
-     * @return array
-     */
-    private function getPieceList()
-    {
-        $weight = $this->shipment->getShippingWeight();
-        Assert::greaterThan($weight, 0, sprintf("Shipment weight must be greater than %d.", 0));
-
-        return [
-            [
-                'type' => $this->getShippingGatewayConfig('package_type'),
-                'weight' => $this->shipment->getShippingWeight(),
-                'width' => $this->getShippingGatewayConfig('package_width'),
-                'height' => $this->getShippingGatewayConfig('package_height'),
-                'length' => $this->getShippingGatewayConfig('package_length'),
-                'quantity' => 1,
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getShip()
-    {
-        $shippingAddress = $this->getOrder()->getShippingAddress();
-
-        return [
-            'shipper' => [
-                'address' => [
-                    'country' => 'PL',
-                    'name' => $this->getShippingGatewayConfig('name'),
-                    'postalCode' => str_replace('-', '', $this->getShippingGatewayConfig('postal_code')),
-                    'city' => $this->getShippingGatewayConfig('city'),
-                    'street' => $this->getShippingGatewayConfig('street'),
-                    'houseNumber' => $this->getShippingGatewayConfig('house_number'),
-                    'phoneNumber' => $this->getShippingGatewayConfig('phone_number'),
-                ],
-            ],
-            'receiver' => [
-                'address' => [
-                    'country' => 'PL',
-                    'name' => $shippingAddress->getFullName(),
-                    'postalCode' => str_replace('-', '', $shippingAddress->getPostcode()),
-                    'houseNumber' => $this->resolveHouseNumber($shippingAddress),
-                    'city' => $shippingAddress->getCity(),
-                    'street' => $shippingAddress->getStreet(),
-                    'phoneNumber' => $shippingAddress->getPhoneNumber(),
-                ],
-            ]
-        ];
-    }
-
-    /**
-     * @param AddressInterface $address
-     *
-     * @return string
-     */
-    private function resolveHouseNumber(AddressInterface $address)
-    {
-        $street = $address->getStreet();
-        $streetParts = explode(" ", $street);
-
-        Assert::greaterThan(count($streetParts), 0, sprintf(
-            "Street \"%s\" is invalid. The street format must be something like %s, where %d is the house number.",
-            $street,
-            "\"Opolska 45\"",
-            45
-        ));
-
-        return end($streetParts);
-    }
 
     /**
      * @return boolean
@@ -255,19 +239,6 @@ final class WebClient implements WebClientInterface
         }
 
         return $date;
-    }
-
-    /**
-     * @return array
-     */
-    private function resolveSpecialServices()
-    {
-        $collectOnDeliveryValue = number_format($this->getOrder()->getTotal(), 2, '.', '');
-
-        return [
-            ['serviceType' => 'COD', 'serviceValue' => $collectOnDeliveryValue],
-            'collectOnDeliveryForm' => $this->getShippingGatewayConfig('collect_on_delivery_form'),
-        ];
     }
 
     /**

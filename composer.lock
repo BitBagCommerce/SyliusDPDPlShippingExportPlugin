@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f532b7050f470bb0485c445d22b6edc8",
+    "content-hash": "664ca554e45c61b16aee84400fbd73d1",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3427,6 +3427,45 @@
                 "psr-3"
             ],
             "time": "2017-06-19T01:22:40+00:00"
+        },
+        {
+            "name": "msztorc/php-dpd-api",
+            "version": "2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/msztorc/php-dpd-api.git",
+                "reference": "61adc501dea51a62edcf4907b04c9a7825f106d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/msztorc/php-dpd-api/zipball/61adc501dea51a62edcf4907b04c9a7825f106d6",
+                "reference": "61adc501dea51a62edcf4907b04c9a7825f106d6",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DPD\\Services\\": "src"
+                },
+                "files": [
+                    "config.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Miroslaw Sztorc",
+                    "email": "mirek.sztorc@gmail.com"
+                }
+            ],
+            "description": "DPD Api",
+            "time": "2017-12-20T10:48:10+00:00"
         },
         {
             "name": "ocramius/package-versions",
