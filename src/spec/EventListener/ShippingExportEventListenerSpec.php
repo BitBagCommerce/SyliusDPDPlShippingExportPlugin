@@ -40,7 +40,6 @@ final class ShippingExportEventListenerSpec extends ObjectBehavior
         $shippingGateway->getCode()->willReturn(ShippingExportEventListener::DPD_GATEWAY_CODE);
         $shippingGateway->getConfigValue('wsdl')->willReturn('wsdl');
 
-        $webClient->getRequestData()->willReturn([]);
         $webClient->setShippingGateway($shippingGateway)->shouldBeCalled();
         $webClient->setShipment($shipment)->shouldBeCalled();
 

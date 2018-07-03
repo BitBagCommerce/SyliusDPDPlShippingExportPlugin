@@ -88,7 +88,5 @@ final class WebClientSpec extends ObjectBehavior
 
         $this->setShippingGateway($shippingGateway);
         $this->setShipment($shipment);
-
-        $this->getRequestData();
     }
 }
