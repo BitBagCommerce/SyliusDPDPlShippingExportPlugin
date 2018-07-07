@@ -80,10 +80,22 @@ final class WebClient implements WebClientInterface
      */
     public function getParcels()
     {
+        $weight = $this->shipment->getShippingWeight();
+
+        if(method_exists($this->getOrder(), 'getCustomWeight') && $this->getOrder()->getCustomWeight()) {
+            $weight = $this->getOrder()->getCustomWeight();
+        }
+
+        $additionalInfo = '';
+
+        if(method_exists($this->getOrder(), 'getShippingNotes')) {
+            $additionalInfo = $this->getOrder()->getShippingNotes();
+        }
+
         return [
             0 => [
-                'content' => $this->getContent(),
-                'weight' => $this->shipment->getShippingWeight(),
+                'content' => $this->getOrder()->getNumber() . ' | ' . $additionalInfo,
+                'weight' => $weight,
             ],
         ];
     }
@@ -94,9 +106,16 @@ final class WebClient implements WebClientInterface
     public function getServices()
     {
         if ($this->isCashOnDelivery()) {
+
+            $value = $this->getOrder()->getTotal();
+
+            if(method_exists($this->getOrder(), 'getCustomCod') && $this->getOrder()->getCustomCod()) {
+                $value = $this->getOrder()->getCustomCod();
+            }
+
             return [
                 'cod' => [
-                    'amount' => $this->getOrder()->getTotal() / 100,
+                    'amount' => $value / 100,
                     'currency' => 'PLN',
                 ],
             ];
@@ -161,31 +180,6 @@ final class WebClient implements WebClientInterface
     {
         return $this->shipment->getOrder();
     }
-
-    /**
-     * @return string
-     */
-    private function getContent()
-    {
-        $content = '';
-
-        /** @var OrderItemInterface $item */
-        foreach ($this->getOrder()->getItems() as $item) {
-
-            $mainTaxon = $item->getProduct()->getMainTaxon();
-
-            if ($mainTaxon !== null) {
-                if (stristr($content, $mainTaxon->getName()) === false) {
-                    $content .= $mainTaxon->getName() . ", ";
-                }
-            }
-        }
-
-        $content = rtrim($content, ", ");
-
-        return substr($content, 0, 30);
-    }
-
 
     /**
      * @return boolean
