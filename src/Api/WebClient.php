@@ -4,7 +4,6 @@ namespace BitBag\DpdPlShippingExportPlugin\Api;
 
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use Sylius\Component\Core\Model\OrderInterface;
-use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
 
 final class WebClient implements WebClientInterface
@@ -82,13 +81,13 @@ final class WebClient implements WebClientInterface
     {
         $weight = $this->shipment->getShippingWeight();
 
-        if(method_exists($this->getOrder(), 'getCustomWeight') && $this->getOrder()->getCustomWeight()) {
+        if (method_exists($this->getOrder(), 'getCustomWeight') && $this->getOrder()->getCustomWeight()) {
             $weight = $this->getOrder()->getCustomWeight();
         }
 
         $additionalInfo = '';
 
-        if(method_exists($this->getOrder(), 'getShippingNotes')) {
+        if (method_exists($this->getOrder(), 'getShippingNotes')) {
             $additionalInfo = $this->getOrder()->getShippingNotes();
         }
 
@@ -105,21 +104,33 @@ final class WebClient implements WebClientInterface
      */
     public function getServices()
     {
+        $services = [];
+
         if ($this->isCashOnDelivery()) {
 
             $value = $this->getOrder()->getTotal();
 
-            if(method_exists($this->getOrder(), 'getCustomCod') && $this->getOrder()->getCustomCod()) {
+            if (method_exists($this->getOrder(), 'getCustomCod') && $this->getOrder()->getCustomCod()) {
                 $value = $this->getOrder()->getCustomCod();
             }
 
-            return [
-                'cod' => [
-                    'amount' => $value / 100,
-                    'currency' => 'PLN',
-                ],
+            $services['cod'] = [
+                'amount' => $value / 100,
+                'currency' => 'PLN',
             ];
         }
+
+        if (method_exists($this->getOrder(), 'getDpdCud') && $this->getOrder()->getDpdCud() === true) {
+            $services['cud'] = '';
+        }
+
+        if (method_exists($this->getOrder(), 'getDpdGuarantee') && $this->getOrder()->getDpdGuarantee() !== null) {
+            $services['guarantee'] = [
+                'type' => $this->getOrder()->getDpdGuarantee()
+            ];
+        }
+
+        return $services;
     }
 
     /**

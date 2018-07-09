@@ -62,15 +62,6 @@ final class ShippingExportEventListener
 
             $protocol = $dpd->generateProtocolByPackageIds([$result->packageId], $this->webClient->getPickupAddress());
 
-            $dpd->pickupRequest(
-                [$protocol->documentId],
-                $this->webClient->getPickupDate(),
-                $this->webClient->getPickupTimeFrom(),
-                $this->webClient->getPickupTimeTo(),
-                $this->webClient->getContactInfo(),
-                $this->webClient->getPickupAddress()
-            );
-
         } catch (\Exception $exception) {
             $exportShipmentEvent->addErrorFlash(sprintf(
                 "DPD Web Service for #%s order: %s",

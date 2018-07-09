@@ -2,7 +2,9 @@
 
 namespace BitBag\DpdPlShippingExportPlugin\Form\Type;
 
+use BitBag\DpdPlShippingExportPlugin\Api\WebClient;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,14 +50,18 @@ final class ShippingGatewayType extends AbstractType
             ->add('phone_number', TextType::class, [
                 'label' => 'bitbag.ui.phone_number',
             ])
-            ->add('shipment_start_hour', TextType::class, [
-                'label' => 'bitbag.ui.shipment_start_hour',
+            ->add('cud', CheckboxType::class, [
+                'label' => 'dpd.ui.cud',
             ])
-            ->add('shipment_end_hour', TextType::class, [
-                'label' => 'bitbag.ui.shipment_end_hour',
-            ])
-            ->add('pickup_breaking_hour', TextType::class, [
-                'label' => 'bitbag.ui.pickup_breaking_hour',
+            ->add('guarantee', ChoiceType::class, [
+                'label' => 'dpd.ui.guarantee',
+                'required' => false,
+                'choices' => [
+                    'dpd.ui.standard' => '',
+                    'dpd.ui.time0930' => WebClient::GUARANTEE_TIME0930,
+                    'dpd.ui.time1200' => WebClient::GUARANTEE_TIME1200,
+                    'dpd.ui.saturday' => WebClient::GUARANTEE_SATURDAY,
+                ],
             ])
             ->add('cod_payment_method_code', TextType::class, [
                 'label' => 'bitbag.ui.cod_payment_method_code',

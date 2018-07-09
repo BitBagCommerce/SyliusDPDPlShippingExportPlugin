@@ -49,3 +49,9 @@ dpd:
         user: Third party
         bank_transfer: Bank transfer
         cash: Cash payment
+        standard: Standard
+        time0930: Delivery before 9:30
+        time1200: Delivery before 12:00
+        saturday: Delivery on Saturday
+        cud: Return shipment
+        guarantee: Delivery guarantee
