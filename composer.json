@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "sylius/sylius": "1.1.*",
+        "sylius/sylius": "^1.1",
         "bitbag/shipping-export-plugin": "^1.2",
         "msztorc/php-dpd-api": "^2.1"
     },
