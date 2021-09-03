@@ -1,0 +1,2 @@
+imports:
+  - { resource: "@DpdPlShippingExportPlugin/Resources/config/services.yml" }

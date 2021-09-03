@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        public: true
+
+    bitbag.dpd_pl_shipping_export_plugin.behat.page.admin.shipping_gateway.create:
+        class: Tests\BitBag\DpdPlShippingExportPlugin\Behat\Page\Admin\ShippingGateway\CreatePage
+        parent: sylius.behat.page.admin.crud.create
+        arguments:
+            - 'bitbag_admin_shipping_gateway_create'

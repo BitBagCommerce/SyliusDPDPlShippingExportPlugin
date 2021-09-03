@@ -33,10 +33,10 @@ final class ShippingGatewayType extends AbstractType
                 'label' => 'bitbag.ui.name',
             ])
             ->add('company', TextType::class, [
-                'label' => 'bitbag.ui.company',
+                'label' => 'sylius.ui.company',
             ])
             ->add('address', TextType::class, [
-                'label' => 'bitbag.ui.address',
+                'label' => 'sylius.ui.address',
             ])
             ->add('city', TextType::class, [
                 'label' => 'bitbag.ui.city',
@@ -45,7 +45,7 @@ final class ShippingGatewayType extends AbstractType
                 'label' => 'bitbag.ui.postal_code',
             ])
             ->add('email', TextType::class, [
-                'label' => 'bitbag.ui.email',
+                'label' => 'sylius.ui.email',
             ])
             ->add('phone_number', TextType::class, [
                 'label' => 'bitbag.ui.phone_number',
