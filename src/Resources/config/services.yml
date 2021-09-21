@@ -9,7 +9,9 @@ services:
         arguments:
             - '@bitbag.dpd_pl_shipping_export_plugin.api.web_client'
             - '@session.flash_bag'
-            - '@?'
+            - '@filesystem'
+            - '@bitbag.manager.shipping_export'
+            - '%bitbag.shipping_labels_path%'
         tags:
             - { name: kernel.event_listener, event: 'bitbag.shipping_export.export_shipment', method: exportShipment }
 

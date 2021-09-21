@@ -2,7 +2,6 @@
 
 namespace BitBag\DpdPlShippingExportPlugin\Api;
 
-use App\Entity\AddressInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
@@ -49,7 +48,7 @@ final class WebClient implements WebClientInterface
             'company' => $this->getShippingGatewayConfig('company'),
             'address' => $this->getShippingGatewayConfig('address'),
             'city' => $this->getShippingGatewayConfig('city'),
-            'postalCode' => $this->getShippingGatewayConfig('postal_code'),
+            'postalCode' => str_replace('-', '', $this->getShippingGatewayConfig('postal_code')),
             'countryCode' => 'PL',
             'email' => $this->getShippingGatewayConfig('email'),
             'phone' => $this->getShippingGatewayConfig('phone_number'),
@@ -61,13 +60,12 @@ final class WebClient implements WebClientInterface
      */
     public function getReceiver()
     {
-        /** @var AddressInterface $shippingAddress */
         $shippingAddress = $this->getOrder()->getShippingAddress();
 
         return [
             'company' => $shippingAddress->getCompany(),
             'name' => $shippingAddress->getFullName(),
-            'address' => $shippingAddress->getStreet() . ' ' . $shippingAddress->getBuildingNumber(),
+            'address' => $shippingAddress->getStreet(),
             'city' => $shippingAddress->getCity(),
             'postalCode' => str_replace('-', '', $shippingAddress->getPostcode()),
             'countryCode' => 'PL',
