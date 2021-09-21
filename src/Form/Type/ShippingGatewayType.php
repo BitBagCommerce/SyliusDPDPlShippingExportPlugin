@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BitBag\DpdPlShippingExportPlugin\Form\Type;
 
 use BitBag\DpdPlShippingExportPlugin\Api\WebClient;
@@ -12,7 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 final class ShippingGatewayType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

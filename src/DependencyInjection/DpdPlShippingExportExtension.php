@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BitBag\DpdPlShippingExportPlugin\DependencyInjection;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 final class DpdPlShippingExportExtension extends Extension
@@ -27,4 +28,3 @@ final class DpdPlShippingExportExtension extends Extension
         return new Configuration();
     }
 }
-

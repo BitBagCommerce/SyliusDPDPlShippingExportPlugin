@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BitBag\DpdPlShippingExportPlugin\EventListener;
 
 use BitBag\DpdPlShippingExportPlugin\Api\WebClientInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingExportInterface;
 use BitBag\SyliusShippingExportPlugin\Event\ExportShipmentEvent;
+use Doctrine\Persistence\ObjectManager;
 use DPD\Services\DPDService;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Webmozart\Assert\Assert;
-use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\Filesystem\Filesystem;
-
 
 final class ShippingExportEventListener
 {
     public const DPD_GATEWAY_CODE = 'dpd_pl';
+
     public const BASE_LABEL_EXTENSION = 'pdf';
 
     /** @var WebClientInterface */
@@ -32,7 +34,6 @@ final class ShippingExportEventListener
 
     /** @var string */
     private $shippingLabelsPath;
-
 
     public function __construct(
         WebClientInterface $webClient,
@@ -82,12 +83,12 @@ final class ShippingExportEventListener
             $result = $dpd->sendPackage($this->webClient->getParcels(), $this->webClient->getReceiver(), 'SENDER', $this->webClient->getServices());
 
             $speedlabel = $dpd->generateSpeedLabelsByPackageIds([$result->packageId], $this->webClient->getPickupAddress());
-
         } catch (\Exception $exception) {
-            $this->flashBag->add('error' ,sprintf(
-                "DPD Web Service for #%s order: %s",
+            $this->flashBag->add('error', sprintf(
+                'DPD Web Service for #%s order: %s',
                 $shipment->getOrder()->getNumber(),
-                $exception->getMessage()));
+                $exception->getMessage()
+            ));
 
             return;
         }
@@ -101,9 +102,7 @@ final class ShippingExportEventListener
         ShippingExportInterface $shippingExport,
         string $labelContent,
         string $labelExtension
-    ): void
-    {
-
+    ): void {
         $labelPath = $this->shippingLabelsPath
             . '/' . $this->getFilename($shippingExport)
             . '.' . $labelExtension;

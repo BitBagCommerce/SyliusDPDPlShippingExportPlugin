@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BitBag\DpdPlShippingExportPlugin\Api;
 
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
@@ -8,20 +10,16 @@ use Sylius\Component\Core\Model\ShipmentInterface;
 
 final class WebClient implements WebClientInterface
 {
-    const DATE_FORMAT = 'Y-m-d';
+    public const DATE_FORMAT = 'Y-m-d';
 
-    /**
-     * @var ShippingGatewayInterface
-     */
+    /** @var ShippingGatewayInterface */
     private $shippingGateway;
 
-    /**
-     * @var ShipmentInterface
-     */
+    /** @var ShipmentInterface */
     private $shipment;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShippingGateway(ShippingGatewayInterface $shippingGateway)
     {
@@ -29,13 +27,12 @@ final class WebClient implements WebClientInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setShipment(ShipmentInterface $shipment)
     {
         $this->shipment = $shipment;
     }
-
 
     /**
      * @return array
@@ -107,7 +104,6 @@ final class WebClient implements WebClientInterface
         $services = [];
 
         if ($this->isCashOnDelivery()) {
-
             $value = $this->getOrder()->getTotal();
 
             if (method_exists($this->getOrder(), 'getCustomCod') && $this->getOrder()->getCustomCod()) {
@@ -126,7 +122,7 @@ final class WebClient implements WebClientInterface
 
         if (method_exists($this->getOrder(), 'getDpdGuarantee') && $this->getOrder()->getDpdGuarantee() !== null) {
             $services['guarantee'] = [
-                'type' => $this->getOrder()->getDpdGuarantee()
+                'type' => $this->getOrder()->getDpdGuarantee(),
             ];
         }
 
@@ -171,7 +167,6 @@ final class WebClient implements WebClientInterface
 
     public function getPickupTimeFrom(): string
     {
-
         return $this->getShippingGatewayConfig('shipment_start_hour');
     }
 
@@ -180,7 +175,6 @@ final class WebClient implements WebClientInterface
      */
     public function getPickupTimeTo(): string
     {
-
         return $this->getShippingGatewayConfig('shipment_end_hour');
     }
 
@@ -193,7 +187,7 @@ final class WebClient implements WebClientInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     private function isCashOnDelivery()
     {
@@ -215,8 +209,8 @@ final class WebClient implements WebClientInterface
         $now = new \DateTime();
         $breakingHour = $this->getShippingGatewayConfig('pickup_breaking_hour');
 
-        if (null !== $breakingHour && $now->format('H') >= (int)$breakingHour) {
-            $tomorrow = $now->modify("+1 day");
+        if (null !== $breakingHour && $now->format('H') >= (int) $breakingHour) {
+            $tomorrow = $now->modify('+1 day');
 
             return $this->resolveWeekend($tomorrow)->format(self::DATE_FORMAT);
         }
@@ -225,22 +219,18 @@ final class WebClient implements WebClientInterface
     }
 
     /**
-     * @param \DateTime $date
-     *
      * @return \DateTime
      */
     private function resolveWeekend(\DateTime $date)
     {
-        $dayOfWeek = (int)$date->format('N');
+        $dayOfWeek = (int) $date->format('N');
 
         if ($dayOfWeek === 6) {
-
-            return $date->modify("+2 days");
+            return $date->modify('+2 days');
         }
 
         if ($dayOfWeek === 7) {
-
-            return $date->modify("+1 day");
+            return $date->modify('+1 day');
         }
 
         return $date;
