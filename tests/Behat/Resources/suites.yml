@@ -1,7 +1,7 @@
 default:
     suites:
         managing_shipping_gateway_dpd_pl:
-            contexts_services:
+            contexts:
                 - sylius.behat.context.hook.doctrine_orm
 
                 - sylius.behat.context.setup.channel
@@ -9,11 +9,19 @@ default:
                 - sylius.behat.context.setup.shipping
                 - bitbag.behat.context.setup.shipping_gateway
 
+                - sylius.behat.context.transform.channel
+                - sylius.behat.context.transform.country
+                - sylius.behat.context.transform.lexical
+                - sylius.behat.context.transform.product
+                - sylius.behat.context.transform.shipping_method
+                - sylius.behat.context.transform.tax_category
+                - sylius.behat.context.transform.zone
+
                 - bitbag.dpd_pl_shipping_export_plugin.behat.context.ui.admin.shipping_gateway
             filters:
                 tags: "@managing_shipping_gateway_dpd && @ui"
         managing_shipping_export_dpd:
-            contexts_services:
+            contexts:
                 - sylius.behat.context.hook.doctrine_orm
                 - bitbag.behat.context.hook.shipping_export
 

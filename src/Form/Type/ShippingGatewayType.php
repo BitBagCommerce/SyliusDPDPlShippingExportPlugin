@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file was created by developers working at BitBag
+ * Do you need more information about us and what we do? Visit our https://bitbag.io website!
+ * We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
+*/
+
+declare(strict_types=1);
+
 namespace BitBag\DpdPlShippingExportPlugin\Form\Type;
 
 use BitBag\DpdPlShippingExportPlugin\Api\WebClient;
@@ -12,7 +20,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 final class ShippingGatewayType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -33,10 +41,10 @@ final class ShippingGatewayType extends AbstractType
                 'label' => 'bitbag.ui.name',
             ])
             ->add('company', TextType::class, [
-                'label' => 'bitbag.ui.company',
+                'label' => 'sylius.ui.company',
             ])
             ->add('address', TextType::class, [
-                'label' => 'bitbag.ui.address',
+                'label' => 'sylius.ui.address',
             ])
             ->add('city', TextType::class, [
                 'label' => 'bitbag.ui.city',
@@ -45,7 +53,7 @@ final class ShippingGatewayType extends AbstractType
                 'label' => 'bitbag.ui.postal_code',
             ])
             ->add('email', TextType::class, [
-                'label' => 'bitbag.ui.email',
+                'label' => 'sylius.ui.email',
             ])
             ->add('phone_number', TextType::class, [
                 'label' => 'bitbag.ui.phone_number',

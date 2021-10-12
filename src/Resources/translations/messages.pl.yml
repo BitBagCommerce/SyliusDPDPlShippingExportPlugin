@@ -41,6 +41,7 @@ bitbag:
         pallet: Palette
         cod_cash: Cash payment
         cod_bank_transfer: Bank transfer
+        dpd_id: Numer klienta
 dpd:
     ui:
         payment_type: Payment method
