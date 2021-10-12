@@ -12,7 +12,6 @@ namespace BitBag\DpdPlShippingExportPlugin\EventListener;
 
 use BitBag\DpdPlShippingExportPlugin\Api\WebClientInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingExportInterface;
-use BitBag\SyliusShippingExportPlugin\Event\ExportShipmentEvent;
 use Doctrine\Persistence\ObjectManager;
 use DPD\Services\DPDService;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
@@ -55,9 +54,6 @@ final class ShippingExportEventListener
         $this->shippingLabelsPath = $shippingLabelsPath;
     }
 
-    /**
-     * @param ExportShipmentEvent $exportShipmentEvent
-     */
     public function exportShipment(ResourceControllerEvent $exportShipmentEvent): void
     {
         /** @var ShippingExportInterface $shippingExport */

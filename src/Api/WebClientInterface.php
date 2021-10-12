@@ -21,13 +21,7 @@ interface WebClientInterface
 
     public const GUARANTEE_SATURDAY = 'SATURDAY';
 
-    /**
-     * @return mixed
-     */
-    public function setShippingGateway(ShippingGatewayInterface $shippingGateway);
+    public function setShippingGateway(ShippingGatewayInterface $shippingGateway): void;
 
-    /**
-     * @return mixed
-     */
-    public function setShipment(ShipmentInterface $shipment);
+    public function setShipment(ShipmentInterface $shipment): void;
 }

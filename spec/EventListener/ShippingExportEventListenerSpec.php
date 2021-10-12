@@ -8,9 +8,13 @@ use BitBag\DpdPlShippingExportPlugin\EventListener\ShippingExportEventListener;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingExportInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use BitBag\SyliusShippingExportPlugin\Event\ExportShipmentEvent;
+use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+use Doctrine\Persistence\ObjectManager;
 use PhpSpec\ObjectBehavior;
 use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Core\Model\ShipmentInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 final class ShippingExportEventListenerSpec extends ObjectBehavior
 {
@@ -19,14 +23,19 @@ final class ShippingExportEventListenerSpec extends ObjectBehavior
         $this->shouldHaveType(ShippingExportEventListener::class);
     }
 
-    function let(WebClientInterface $webClient, SoapClientInterface $soapClient)
-    {
-        $this->beConstructedWith($webClient, $soapClient);
+    function let (
+        WebClientInterface $webClient,
+        FlashBagInterface $flashBag,
+        Filesystem $filesystem,
+        ObjectManager $objectManager
+    ) {
+        $shippingLabelsPath = 'labels';
+        $this->beConstructedWith($webClient, $flashBag, $filesystem, $objectManager, $shippingLabelsPath);
     }
 
     function it_export_shipment
     (
-        ExportShipmentEvent $exportShipmentEvent,
+        ResourceControllerEvent $exportShipmentEvent,
         ShippingExportInterface $shippingExport,
         ShippingGatewayInterface $shippingGateway,
         ShipmentInterface $shipment,
@@ -38,17 +47,19 @@ final class ShippingExportEventListenerSpec extends ObjectBehavior
         $webClient->setShippingGateway($shippingGateway);
 
         $shippingGateway->getCode()->willReturn(ShippingExportEventListener::DPD_GATEWAY_CODE);
+
         $shippingGateway->getConfigValue('wsdl')->willReturn('wsdl');
+        $shippingGateway->getConfigValue('id')->willReturn(1);
+        $shippingGateway->getConfigValue('login')->willReturn('test');
+        $shippingGateway->getConfigValue('password')->willReturn('test');
 
         $webClient->setShippingGateway($shippingGateway)->shouldBeCalled();
         $webClient->setShipment($shipment)->shouldBeCalled();
 
         $shippingExport->getShipment()->willReturn($shipment);
 
-        $exportShipmentEvent->getShippingExport()->willReturn($shippingExport);
-        $exportShipmentEvent->addSuccessFlash()->shouldBeCalled();
-        $exportShipmentEvent->exportShipment()->shouldBeCalled();
-        $exportShipmentEvent->saveShippingLabel('', 'pdf')->shouldBeCalled();
+        $exportShipmentEvent->getSubject()->willReturn($shippingExport);
+
         $shippingExport->getShippingGateway()->willReturn($shippingGateway);
 
         $order->getNumber()->willReturn(1000);

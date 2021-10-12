@@ -24,26 +24,17 @@ final class WebClient implements WebClientInterface
     /** @var ShipmentInterface */
     private $shipment;
 
-    /**
-     * @inheritdoc
-     */
-    public function setShippingGateway(ShippingGatewayInterface $shippingGateway)
+    public function setShippingGateway(ShippingGatewayInterface $shippingGateway): void
     {
         $this->shippingGateway = $shippingGateway;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function setShipment(ShipmentInterface $shipment)
+    public function setShipment(ShipmentInterface $shipment): void
     {
         $this->shipment = $shipment;
     }
 
-    /**
-     * @return array
-     */
-    public function getSender()
+    public function getSender(): array
     {
         return [
             'fid' => $this->getShippingGatewayConfig('id'),
@@ -58,10 +49,7 @@ final class WebClient implements WebClientInterface
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getReceiver()
+    public function getReceiver(): array
     {
         $shippingAddress = $this->getOrder()->getShippingAddress();
 
@@ -77,10 +65,7 @@ final class WebClient implements WebClientInterface
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getParcels()
+    public function getParcels(): array
     {
         $weight = $this->shipment->getShippingWeight();
 
@@ -102,10 +87,7 @@ final class WebClient implements WebClientInterface
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getServices()
+    public function getServices(): array
     {
         $services = [];
 
@@ -135,10 +117,7 @@ final class WebClient implements WebClientInterface
         return $services;
     }
 
-    /**
-     * @return array
-     */
-    public function getPickupAddress()
+    public function getPickupAddress(): array
     {
         return [
             'fid' => $this->getShippingGatewayConfig('id'),
@@ -153,10 +132,7 @@ final class WebClient implements WebClientInterface
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getContactInfo()
+    public function getContactInfo(): array
     {
         return [
             'name' => $this->getShippingGatewayConfig('name'),
@@ -176,26 +152,17 @@ final class WebClient implements WebClientInterface
         return $this->getShippingGatewayConfig('shipment_start_hour');
     }
 
-    /**
-     * @return array
-     */
     public function getPickupTimeTo(): string
     {
         return $this->getShippingGatewayConfig('shipment_end_hour');
     }
 
-    /**
-     * @return OrderInterface|\Sylius\Component\Order\Model\OrderInterface
-     */
-    private function getOrder()
+    private function getOrder(): OrderInterface
     {
         return $this->shipment->getOrder();
     }
 
-    /**
-     * @return bool
-     */
-    private function isCashOnDelivery()
+    private function isCashOnDelivery(): bool
     {
         $codPaymentMethodCode = $this->getShippingGatewayConfig('cod_payment_method_code');
         $payments = $this->getOrder()->getPayments();
@@ -207,10 +174,7 @@ final class WebClient implements WebClientInterface
         return false;
     }
 
-    /**
-     * @return string
-     */
-    private function resolvePickupDate()
+    private function resolvePickupDate(): string
     {
         $now = new \DateTime();
         $breakingHour = $this->getShippingGatewayConfig('pickup_breaking_hour');
@@ -224,10 +188,7 @@ final class WebClient implements WebClientInterface
         return $this->resolveWeekend($now)->format(self::DATE_FORMAT);
     }
 
-    /**
-     * @return \DateTime
-     */
-    private function resolveWeekend(\DateTime $date)
+    private function resolveWeekend(\DateTime $date): \DateTime
     {
         $dayOfWeek = (int) $date->format('N');
 
@@ -244,10 +205,8 @@ final class WebClient implements WebClientInterface
 
     /**
      * @param $config
-     *
-     * @return string
      */
-    private function getShippingGatewayConfig($config)
+    private function getShippingGatewayConfig($config): string
     {
         return $this->shippingGateway->getConfigValue($config);
     }
