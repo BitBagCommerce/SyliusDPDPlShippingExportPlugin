@@ -24,4 +24,14 @@ interface WebClientInterface
     public function setShippingGateway(ShippingGatewayInterface $shippingGateway): void;
 
     public function setShipment(ShipmentInterface $shipment): void;
+
+    public function getSender(): array;
+
+    public function getParcels(): array;
+
+    public function getReceiver(): array;
+
+    public function getServices(): array;
+
+    public function getPickupAddress(): array;
 }

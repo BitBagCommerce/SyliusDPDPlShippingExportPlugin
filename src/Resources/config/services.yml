@@ -18,5 +18,3 @@ services:
     bitbag.dpd_pl_shipping_export_plugin.api.web_client:
         class: BitBag\DpdPlShippingExportPlugin\Api\WebClient
 
-    bitbag.dpd_pl_shipping_export_plugin.api.soap_client:
-        class: BitBag\DpdPlShippingExportPlugin\Api\SoapClient
