@@ -13,6 +13,7 @@ namespace BitBag\DpdPlShippingExportPlugin\Api;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingGatewayInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
+use Webmozart\Assert\Assert;
 
 final class WebClient implements WebClientInterface
 {
@@ -52,13 +53,14 @@ final class WebClient implements WebClientInterface
     public function getReceiver(): array
     {
         $shippingAddress = $this->getOrder()->getShippingAddress();
+        Assert::notNull($shippingAddress);
 
         return [
             'company' => $shippingAddress->getCompany(),
             'name' => $shippingAddress->getFullName(),
             'address' => $shippingAddress->getStreet(),
             'city' => $shippingAddress->getCity(),
-            'postalCode' => str_replace('-', '', $shippingAddress->getPostcode()),
+            'postalCode' => $this->getPostCode(),
             'countryCode' => 'PL',
             'phone' => $shippingAddress->getPhoneNumber(),
             'email' => '',
@@ -159,7 +161,10 @@ final class WebClient implements WebClientInterface
 
     private function getOrder(): OrderInterface
     {
-        return $this->shipment->getOrder();
+        $order = $this->shipment->getOrder();
+        Assert::notNull($order);
+
+        return $order;
     }
 
     private function isCashOnDelivery(): bool
@@ -168,7 +173,13 @@ final class WebClient implements WebClientInterface
         $payments = $this->getOrder()->getPayments();
 
         foreach ($payments as $payment) {
-            return $payment->getMethod()->getCode() === $codPaymentMethodCode;
+            $paymentMethod = $payment->getMethod();
+
+            if (null === $paymentMethod) {
+                continue;
+            }
+
+            return $paymentMethod->getCode() === $codPaymentMethodCode;
         }
 
         return false;
@@ -179,7 +190,7 @@ final class WebClient implements WebClientInterface
         $now = new \DateTime();
         $breakingHour = $this->getShippingGatewayConfig('pickup_breaking_hour');
 
-        if (null !== $breakingHour && $now->format('H') >= (int) $breakingHour) {
+        if ($now->format('H') >= (int) $breakingHour) {
             $tomorrow = $now->modify('+1 day');
 
             return $this->resolveWeekend($tomorrow)->format(self::DATE_FORMAT);
@@ -203,11 +214,19 @@ final class WebClient implements WebClientInterface
         return $date;
     }
 
-    /**
-     * @param $config
-     */
-    private function getShippingGatewayConfig($config): string
+    /** @return mixed */
+    private function getShippingGatewayConfig(string $config)
     {
         return $this->shippingGateway->getConfigValue($config);
+    }
+
+    private function getPostCode(): string
+    {
+        $shippingAddress = $this->getOrder()->getShippingAddress();
+        Assert::notNull($shippingAddress);
+
+        $postCode = $shippingAddress->getPostcode();
+
+        return $postCode !== null ? str_replace('-', '', $postCode) : '';
     }
 }

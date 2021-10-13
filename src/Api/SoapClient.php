@@ -12,11 +12,13 @@ namespace BitBag\DpdPlShippingExportPlugin\Api;
 
 final class SoapClient implements SoapClientInterface
 {
+    /** @phpstan-ignore-next-line */
     public function createShipment(array $requestData, $wsdl)
     {
         /** @var object $soapClient */
         $soapClient = new \SoapClient($wsdl);
 
+        /** @phpstan-ignore-next-line */
         return $soapClient->createShipment($requestData);
     }
 }

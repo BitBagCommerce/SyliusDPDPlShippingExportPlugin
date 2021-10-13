@@ -12,5 +12,6 @@ namespace BitBag\DpdPlShippingExportPlugin\Api;
 
 interface SoapClientInterface
 {
+    /** @phpstan-ignore-next-line */
     public function createShipment(array $requestData, $wsdl);
 }

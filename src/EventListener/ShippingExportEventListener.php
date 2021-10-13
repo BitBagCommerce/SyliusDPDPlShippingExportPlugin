@@ -14,6 +14,7 @@ use BitBag\DpdPlShippingExportPlugin\Api\WebClientInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingExportInterface;
 use Doctrine\Persistence\ObjectManager;
 use DPD\Services\DPDService;
+use http\Exception\InvalidArgumentException;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -56,7 +57,7 @@ final class ShippingExportEventListener
 
     public function exportShipment(ResourceControllerEvent $exportShipmentEvent): void
     {
-        /** @var ShippingExportInterface $shippingExport */
+        /** @var ShippingExportInterface|mixed $shippingExport */
         $shippingExport = $exportShipmentEvent->getSubject();
         Assert::isInstanceOf($shippingExport, ShippingExportInterface::class);
 
@@ -70,6 +71,9 @@ final class ShippingExportEventListener
         $shipment = $shippingExport->getShipment();
 
         $this->webClient->setShippingGateway($shippingGateway);
+
+        Assert::notNull($shipment);
+
         $this->webClient->setShipment($shipment);
 
         try {
@@ -84,11 +88,11 @@ final class ShippingExportEventListener
 
             $result = $dpd->sendPackage($this->webClient->getParcels(), $this->webClient->getReceiver(), 'SENDER', $this->webClient->getServices());
 
-            $speedlabel = $dpd->generateSpeedLabelsByPackageIds([$result->packageId], $this->webClient->getPickupAddress());
+            $speedLabel = $dpd->generateSpeedLabelsByPackageIds([$result->packageId], $this->webClient->getPickupAddress());    /** @phpstan-ignore-line */
         } catch (\Exception $exception) {
             $this->flashBag->add('error', sprintf(
                 'DPD Web Service for #%s order: %s',
-                $shipment->getOrder()->getNumber(),
+                $shipment->getOrder() !== null ? (string) $shipment->getOrder()->getNumber() : '',
                 $exception->getMessage()
             ));
 
@@ -96,7 +100,7 @@ final class ShippingExportEventListener
         }
 
         $this->flashBag->add('success', 'bitbag.ui.shipment_data_has_been_exported');
-        $this->saveShippingLabel($shippingExport, $speedlabel->filedata, self::BASE_LABEL_EXTENSION);
+        $this->saveShippingLabel($shippingExport, $speedLabel->filedata, self::BASE_LABEL_EXTENSION);   /** @phpstan-ignore-line */
         $this->markShipmentAsExported($shippingExport);
     }
 
@@ -132,7 +136,7 @@ final class ShippingExportEventListener
             '_',
             [
                 $shipmentId,
-                preg_replace('~[^A-Za-z0-9]~', '', $orderNumber),
+                preg_replace('~[^A-Za-z0-9]~', '', (string) $orderNumber),
             ]
         );
     }
