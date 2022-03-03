@@ -3,18 +3,20 @@
 namespace Tests\BitBag\DpdPlShippingExportPlugin\Behat\Context\Ui\Admin;
 
 use Behat\Behat\Context\Context;
+use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
 use Sylius\Behat\NotificationType;
-use Sylius\Behat\Page\SymfonyPageInterface;
+use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 use Sylius\Behat\Service\NotificationCheckerInterface;
 use Sylius\Behat\Service\Resolver\CurrentPageResolverInterface;
 use Tests\BitBag\SyliusShippingExportPlugin\Behat\Behaviour\ContainsError;
 use Tests\BitBag\DpdPlShippingExportPlugin\Behat\Page\Admin\ShippingGateway\CreatePageInterface;
 use Webmozart\Assert\Assert;
+use Tests\BitBag\DpdPlShippingExportPlugin\Behat\Page\Admin\ShippingGateway\CreatePage;
 
 final class ShippingGatewayContext implements Context
 {
     /**
-     * @var CreatePageInterface|ContainsError
+     * @var CreatePage
      */
     private $createPage;
 
@@ -29,12 +31,12 @@ final class ShippingGatewayContext implements Context
     private $notificationChecker;
 
     /**
-     * @param CreatePageInterface $createPage
+     * @param CreatePage $createPage
      * @param CurrentPageResolverInterface $currentPageResolver
      * @param NotificationCheckerInterface $notificationChecker
      */
     public function __construct(
-        CreatePageInterface $createPage,
+        CreatePage $createPage,
         CurrentPageResolverInterface $currentPageResolver,
         NotificationCheckerInterface $notificationChecker
     )
@@ -113,13 +115,13 @@ final class ShippingGatewayContext implements Context
         $this->resolveCurrentPage()->selectFieldOption($filed, $option);
     }
 
-    /**
-     * @return CreatePageInterface|ContainsError|SymfonyPageInterface
-     */
-    private function resolveCurrentPage()
+    private function resolveCurrentPage(): CreatePage
     {
-        return $this->currentPageResolver->getCurrentPageWithForm([
+        /** @var CreatePage $page */
+        $page = $this->currentPageResolver->getCurrentPageWithForm([
             $this->createPage,
         ]);
+
+        return $page;
     }
 }

@@ -36,7 +36,7 @@ final class ShippingExportContext implements Context
      */
     public function iExportAllNewShipments()
     {
-        $this->DPDApiMocker->performActionInApiSuccessfulScope(function () {
+        $this->DPDApiMocker->performActionInApiSuccessfulScope(function (): void {
             $this->indexPage->exportAllShipments();
         });
     }
@@ -46,7 +46,7 @@ final class ShippingExportContext implements Context
      */
     public function iExportFirsShipments()
     {
-        $this->DPDApiMocker->performActionInApiSuccessfulScope(function () {
+        $this->DPDApiMocker->performActionInApiSuccessfulScope(function (): void {
             $this->indexPage->exportFirsShipment();
         });
     }
