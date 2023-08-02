@@ -47,6 +47,9 @@
         "symfony/web-profiler-bundle": "^4.4 || ^5.2",
         "vimeo/psalm": "4.7.1"
     },
+    "conflict": {
+        "sylius/resource-bundle": "1.9.1"
+    },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
