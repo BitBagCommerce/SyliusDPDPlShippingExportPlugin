@@ -48,7 +48,8 @@
         "vimeo/psalm": "4.7.1"
     },
     "conflict": {
-        "sylius/resource-bundle": "1.9.1"
+        "sylius/resource-bundle": "1.9.1 || 1.9.0",
+        "doctrine/orm": ">=2.15.2"
     },
     "config": {
         "sort-packages": true,
