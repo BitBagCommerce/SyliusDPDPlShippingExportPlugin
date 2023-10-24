@@ -8,7 +8,7 @@ services:
         class: BitBag\DpdPlShippingExportPlugin\EventListener\ShippingExportEventListener
         arguments:
             - '@bitbag.dpd_pl_shipping_export_plugin.api.web_client'
-            - '@session.flash_bag'
+            - '@request_stack'
             - '@filesystem'
             - '@bitbag.manager.shipping_export'
             - '%bitbag.shipping_labels_path%'

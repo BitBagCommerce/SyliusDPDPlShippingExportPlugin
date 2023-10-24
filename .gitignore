@@ -9,3 +9,5 @@
 !/etc/build/.gitkeep
 
 /tests/Application/shipping_labels/*
+
+composer.lock

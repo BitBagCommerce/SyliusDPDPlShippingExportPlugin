@@ -12,7 +12,10 @@ use PhpSpec\ObjectBehavior;
 use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class ShippingExportEventListenerSpec extends ObjectBehavior
 {
@@ -23,12 +26,12 @@ final class ShippingExportEventListenerSpec extends ObjectBehavior
 
     function let (
         WebClientInterface $webClient,
-        FlashBagInterface $flashBag,
+        RequestStack $requestStack,
         Filesystem $filesystem,
         ObjectManager $objectManager
     ) {
         $shippingLabelsPath = 'labels';
-        $this->beConstructedWith($webClient, $flashBag, $filesystem, $objectManager, $shippingLabelsPath);
+        $this->beConstructedWith($webClient, $requestStack, $filesystem, $objectManager, $shippingLabelsPath);
     }
 
     function it_export_shipment
@@ -38,10 +41,15 @@ final class ShippingExportEventListenerSpec extends ObjectBehavior
         ShippingGatewayInterface $shippingGateway,
         ShipmentInterface $shipment,
         WebClientInterface $webClient,
-        Order $order
+        Order $order,
+        RequestStack $requestStack,
+        Session $session,
+        FlashBagInterface $flashBag,
     )
     {
         $webClient->setShippingGateway($shippingGateway);
+        $requestStack->getSession()->willReturn($session);
+        $session->getFlashBag()->willReturn($flashBag);
 
         $shippingGateway->getCode()->willReturn(ShippingExportEventListener::DPD_GATEWAY_CODE);
 
