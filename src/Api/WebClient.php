@@ -19,11 +19,9 @@ final class WebClient implements WebClientInterface
 {
     public const DATE_FORMAT = 'Y-m-d';
 
-    /** @var ShippingGatewayInterface */
-    private $shippingGateway;
+    private ShippingGatewayInterface $shippingGateway;
 
-    /** @var ShipmentInterface */
-    private $shipment;
+    private ShipmentInterface $shipment;
 
     public function setShippingGateway(ShippingGatewayInterface $shippingGateway): void
     {
@@ -123,14 +121,6 @@ final class WebClient implements WebClientInterface
     {
         return [
             'fid' => $this->getShippingGatewayConfig('id'),
-//            'name' => 'NAME',
-//            'company' => 'COMPANY',
-//            'address' => 'ADDRESS',
-//            'city' => 'CITY',
-//            'postalCode' => '85132',
-//            'countryCode' => 'PL',
-//            'email'=> 'test@test.test',
-//            'phone' => '777888999',
         ];
     }
 
@@ -214,8 +204,7 @@ final class WebClient implements WebClientInterface
         return $date;
     }
 
-    /** @return mixed */
-    private function getShippingGatewayConfig(string $config)
+    private function getShippingGatewayConfig(string $config): mixed
     {
         return $this->shippingGateway->getConfigValue($config);
     }

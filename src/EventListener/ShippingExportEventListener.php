@@ -14,10 +14,11 @@ use BitBag\DpdPlShippingExportPlugin\Api\WebClientInterface;
 use BitBag\SyliusShippingExportPlugin\Entity\ShippingExportInterface;
 use Doctrine\Persistence\ObjectManager;
 use DPD\Services\DPDService;
-use http\Exception\InvalidArgumentException;
+use Exception;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Webmozart\Assert\Assert;
 
 final class ShippingExportEventListener
@@ -26,30 +27,25 @@ final class ShippingExportEventListener
 
     public const BASE_LABEL_EXTENSION = 'pdf';
 
-    /** @var WebClientInterface */
-    private $webClient;
+    private WebClientInterface $webClient;
 
-    /** @var FlashBagInterface */
-    private $flashBag;
+    private RequestStack $requestStack;
 
-    /** @var Filesystem */
-    private $fileSystem;
+    private Filesystem $fileSystem;
 
-    /** @var ObjectManager */
-    private $shippingExportManager;
+    private ObjectManager $shippingExportManager;
 
-    /** @var string */
-    private $shippingLabelsPath;
+    private string $shippingLabelsPath;
 
     public function __construct(
         WebClientInterface $webClient,
-        FlashBagInterface $flashBag,
+        RequestStack $requestStack,
         FileSystem $fileSystem,
         ObjectManager $shippingExportManager,
         string $shippingLabelsPath
     ) {
         $this->webClient = $webClient;
-        $this->flashBag = $flashBag;
+        $this->requestStack = $requestStack;
         $this->fileSystem = $fileSystem;
         $this->shippingExportManager = $shippingExportManager;
         $this->shippingLabelsPath = $shippingLabelsPath;
@@ -75,6 +71,8 @@ final class ShippingExportEventListener
         Assert::notNull($shipment);
 
         $this->webClient->setShipment($shipment);
+        /** @var Session $session */
+        $session = $this->requestStack->getSession();
 
         try {
             $dpd = new DPDService(
@@ -89,8 +87,8 @@ final class ShippingExportEventListener
             $result = $dpd->sendPackage($this->webClient->getParcels(), $this->webClient->getReceiver(), 'SENDER', $this->webClient->getServices());
 
             $speedLabel = $dpd->generateSpeedLabelsByPackageIds([$result->packageId], $this->webClient->getPickupAddress());    /** @phpstan-ignore-line */
-        } catch (\Exception $exception) {
-            $this->flashBag->add('error', sprintf(
+        } catch (Exception $exception) {
+            $session->getFlashBag()->add('error', sprintf(
                 'DPD Web Service for #%s order: %s',
                 $shipment->getOrder() !== null ? (string) $shipment->getOrder()->getNumber() : '',
                 $exception->getMessage()
@@ -99,7 +97,7 @@ final class ShippingExportEventListener
             return;
         }
 
-        $this->flashBag->add('success', 'bitbag.ui.shipment_data_has_been_exported');
+        $session->getFlashBag()->add('success', 'bitbag.ui.shipment_data_has_been_exported');
         $this->saveShippingLabel($shippingExport, $speedLabel->filedata, self::BASE_LABEL_EXTENSION);   /** @phpstan-ignore-line */
         $this->markShipmentAsExported($shippingExport);
     }

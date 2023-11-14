@@ -36,7 +36,7 @@ This **open-source plugin was developed to help the Sylius community**. If you h
 # Installation
 
 ```bash
-$ composer require bitbag/dpdpl-shipping-export-plugin
+composer require bitbag/dpd-pl-shipping-export-plugin
 ```
 
 Add plugin dependencies to your `config/bundles.php` file:
@@ -50,20 +50,37 @@ return [
 
 Import required config in your `config/packages/_sylius.yaml` file:
 ```yaml
-# config/packages/_sylius.yaml
-
 imports:
     ...
 
   - { resource: "@DpdPlShippingExportPlugin/Resources/config/config.yml" }
 ```
 
-Update your database schema
-```bash
-bin/console doctrine:schema:update
+Import routing in your `config/routes.yaml` file:
+
+```yaml
+bitbag_shipping_export_plugin:
+  resource: "@BitBagSyliusShippingExportPlugin/Resources/config/routing.yml"
+  prefix: /admin
 ```
 
-**Note:** If you are running it on production, add the `-e prod` flag to this command.
+Clear application cache by using command:
+
+```bash
+bin/console cache:clear
+```
+
+Verify database schema changes:
+
+```bash
+bin/console doctrine:schema:update --dump-sql
+```
+
+Update your database schema
+
+```bash
+bin/console doctrine:schema:update --force --complete
+```
 
 # About us
 

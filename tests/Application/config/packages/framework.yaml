@@ -4,3 +4,7 @@ framework:
     csrf_protection: true
     session:
         handler_id: ~
+    cache:
+        pools:
+            test.mailer_pool:
+                adapter: cache.adapter.filesystem
