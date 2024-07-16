@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file has been created by developers from BitBag.
+ * Feel free to contact us once you face any issues or want to start
+ * You can find more information about us on https://bitbag.io and write us
+ * an email on hello@bitbag.io.
+ */
+
+declare(strict_types=1);
+
 namespace Tests\BitBag\DpdPlShippingExportPlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
@@ -17,38 +26,22 @@ use Sylius\Component\Shipping\Model\ShipmentUnitInterface;
 
 final class ShippingGatewayContext implements Context
 {
-    /**
-     * @var ProductVariantResolverInterface
-     */
+    /** @var ProductVariantResolverInterface */
     private $defaultVariantResolver;
 
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $orderRepository;
 
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $shipmentRepository;
 
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     private $entityManager;
 
-    /**
-     * @var SharedStorageInterface
-     */
+    /** @var SharedStorageInterface */
     private $sharedStorage;
 
-
     /**
-     * @param ProductVariantResolverInterface $productVariantResolver
-     * @param RepositoryInterface $orderRepository
-     * @param RepositoryInterface $shipmentRepository
-     * @param EntityManagerInterface $entityManager
-     * @param SharedStorageInterface $sharedStorage
      * @internal param ObjectManager $objectManager
      */
     public function __construct(
@@ -56,16 +49,14 @@ final class ShippingGatewayContext implements Context
         RepositoryInterface $orderRepository,
         RepositoryInterface $shipmentRepository,
         EntityManagerInterface $entityManager,
-        SharedStorageInterface $sharedStorage
-    )
-    {
+        SharedStorageInterface $sharedStorage,
+    ) {
         $this->defaultVariantResolver = $productVariantResolver;
         $this->shipmentRepository = $shipmentRepository;
         $this->orderRepository = $orderRepository;
         $this->entityManager = $entityManager;
         $this->sharedStorage = $sharedStorage;
     }
-
 
     /**
      * @Given /^the customer set the shipping address ("[^"]+" addressed it to "[^"]+", "[^"]+" "[^"]+" in the "[^"]+"(?:|, "[^"]+")) to orders$/
@@ -105,7 +96,6 @@ final class ShippingGatewayContext implements Context
 
         /** @var ShipmentInterface $shipment */
         foreach ($shipments as $shipment) {
-
             /** @var OrderItemInterface $orderItem */
             foreach ($shipment->getOrder()->getItems() as $orderItem) {
                 /** @var ShipmentUnitInterface $itemUnit */

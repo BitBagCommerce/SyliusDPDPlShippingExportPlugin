@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file has been created by developers from BitBag.
+ * Feel free to contact us once you face any issues or want to start
+ * You can find more information about us on https://bitbag.io and write us
+ * an email on hello@bitbag.io.
+ */
+
+declare(strict_types=1);
+
 namespace Tests\BitBag\DpdPlShippingExportPlugin\Behat\Context\Ui\Admin;
 
 use Behat\Behat\Context\Context;
@@ -8,25 +17,16 @@ use Tests\BitBag\SyliusShippingExportPlugin\Behat\Page\Admin\ShippingExport\Inde
 
 final class ShippingExportContext implements Context
 {
-    /**
-     * @var IndexPageInterface
-     */
+    /** @var IndexPageInterface */
     private $indexPage;
 
-    /**
-     * @var DPDApiMocker
-     */
+    /** @var DPDApiMocker */
     private $DPDApiMocker;
 
-    /**
-     * @param IndexPageInterface $indexPage
-     * @param DPDApiMocker $DPDApiMocker
-     */
     public function __construct(
         IndexPageInterface $indexPage,
-        DPDApiMocker $DPDApiMocker
-    )
-    {
+        DPDApiMocker $DPDApiMocker,
+    ) {
         $this->DPDApiMocker = $DPDApiMocker;
         $this->indexPage = $indexPage;
     }
