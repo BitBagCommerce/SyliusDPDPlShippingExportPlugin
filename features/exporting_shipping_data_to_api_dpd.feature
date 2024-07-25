@@ -34,11 +34,11 @@ Feature: Managing shipping gateway
         And it has "package_length" field set to "22"
         And it has "cod_payment_method_code" field set to "stripe_checkout"
         And it has "collect_on_delivery_form" field set to "BANK_TRANSFER"
-        And the store has a product "Chicken" priced at "$2" in "Web-US" channel
+        And the store has a product "Chicken" priced at "$2.00" in "Web-US" channel
         And customer "user@bitbag.pl" has placed 5 orders on the "Web-US" channel in each buying 5 "Chicken" products
         And the customer set the shipping address "Mike Ross" addressed it to "350 5th Ave", "10118" "New York" in the "United States" to orders
         And those orders were placed with "DPD Express" shipping method
-        And set product weight to "10"
+        And set product weight to "10.00"
         And set units to the shipment
 
     @ui

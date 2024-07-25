@@ -74,7 +74,7 @@ final class ShippingGatewayContext implements Context
     /**
      * @Given set product weight to :weight
      */
-    public function setProductWeightTo($weight)
+    public function setProductWeightTo(float $weight)
     {
         /** @var ProductInterface $product */
         $product = $this->sharedStorage->get('product');
