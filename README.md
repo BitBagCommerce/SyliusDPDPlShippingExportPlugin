@@ -13,8 +13,10 @@ Like what we do? Want to join us? Check out our job listings on our [career page
 ***
 
 * [Overview](#overview)
+* [Functionalities](doc/functionalities.md)
 * [Support](#we-are-here-to-help)
 * [Installation](#installation)
+* [Usage](#usage)
 * [About us](#about-us)
   * [Community](#community)
 * [Demo](#demo)
@@ -81,7 +83,9 @@ Update your database schema
 ```bash
 bin/console doctrine:schema:update --force --complete
 ```
-
+# Usage
+### Important!
+If non-existent postal codes are provided - both in the "shipping gateway" and during the order, export of the shipment will not be possible. For the plugin to work properly, it is also necessary to add the weight of the products.
 # About us
 
 ---
