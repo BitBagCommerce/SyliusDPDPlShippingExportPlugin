@@ -1,10 +1,11 @@
 <?php
 
 /*
- * This file was created by developers working at BitBag
- * Do you need more information about us and what we do? Visit our https://bitbag.io website!
- * We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
-*/
+ * This file has been created by developers from BitBag.
+ * Feel free to contact us once you face any issues or want to start
+ * You can find more information about us on https://bitbag.io and write us
+ * an email on hello@bitbag.io.
+ */
 
 declare(strict_types=1);
 
@@ -104,11 +105,11 @@ final class WebClient implements WebClientInterface
             ];
         }
 
-        if (method_exists($this->getOrder(), 'getDpdCud') && $this->getOrder()->getDpdCud() === true) {
+        if (method_exists($this->getOrder(), 'getDpdCud') && true === $this->getOrder()->getDpdCud()) {
             $services['cud'] = '';
         }
 
-        if (method_exists($this->getOrder(), 'getDpdGuarantee') && $this->getOrder()->getDpdGuarantee() !== null) {
+        if (method_exists($this->getOrder(), 'getDpdGuarantee') && null !== $this->getOrder()->getDpdGuarantee()) {
             $services['guarantee'] = [
                 'type' => $this->getOrder()->getDpdGuarantee(),
             ];
@@ -193,11 +194,11 @@ final class WebClient implements WebClientInterface
     {
         $dayOfWeek = (int) $date->format('N');
 
-        if ($dayOfWeek === 6) {
+        if (6 === $dayOfWeek) {
             return $date->modify('+2 days');
         }
 
-        if ($dayOfWeek === 7) {
+        if (7 === $dayOfWeek) {
             return $date->modify('+1 day');
         }
 
@@ -216,6 +217,6 @@ final class WebClient implements WebClientInterface
 
         $postCode = $shippingAddress->getPostcode();
 
-        return $postCode !== null ? str_replace('-', '', $postCode) : '';
+        return null !== $postCode ? str_replace('-', '', $postCode) : '';
     }
 }

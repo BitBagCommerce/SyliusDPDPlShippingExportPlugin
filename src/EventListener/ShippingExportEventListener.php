@@ -1,10 +1,11 @@
 <?php
 
 /*
- * This file was created by developers working at BitBag
- * Do you need more information about us and what we do? Visit our https://bitbag.io website!
- * We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
-*/
+ * This file has been created by developers from BitBag.
+ * Feel free to contact us once you face any issues or want to start
+ * You can find more information about us on https://bitbag.io and write us
+ * an email on hello@bitbag.io.
+ */
 
 declare(strict_types=1);
 
@@ -42,7 +43,7 @@ final class ShippingExportEventListener
         RequestStack $requestStack,
         FileSystem $fileSystem,
         ObjectManager $shippingExportManager,
-        string $shippingLabelsPath
+        string $shippingLabelsPath,
     ) {
         $this->webClient = $webClient;
         $this->requestStack = $requestStack;
@@ -60,7 +61,7 @@ final class ShippingExportEventListener
         $shippingGateway = $shippingExport->getShippingGateway();
         Assert::notNull($shippingGateway);
 
-        if ($shippingGateway->getCode() !== self::DPD_GATEWAY_CODE) {
+        if (self::DPD_GATEWAY_CODE !== $shippingGateway->getCode()) {
             return;
         }
 
@@ -79,7 +80,7 @@ final class ShippingExportEventListener
                 $shippingGateway->getConfigValue('id'),
                 $shippingGateway->getConfigValue('login'),
                 $shippingGateway->getConfigValue('password'),
-                $shippingGateway->getConfigValue('wsdl')
+                $shippingGateway->getConfigValue('wsdl'),
             );
 
             $dpd->setSender($this->webClient->getSender());
@@ -90,8 +91,8 @@ final class ShippingExportEventListener
         } catch (Exception $exception) {
             $session->getFlashBag()->add('error', sprintf(
                 'DPD Web Service for #%s order: %s',
-                $shipment->getOrder() !== null ? (string) $shipment->getOrder()->getNumber() : '',
-                $exception->getMessage()
+                null !== $shipment->getOrder() ? (string) $shipment->getOrder()->getNumber() : '',
+                $exception->getMessage(),
             ));
 
             return;
@@ -105,7 +106,7 @@ final class ShippingExportEventListener
     public function saveShippingLabel(
         ShippingExportInterface $shippingExport,
         string $labelContent,
-        string $labelExtension
+        string $labelExtension,
     ): void {
         $labelPath = $this->shippingLabelsPath
             . '/' . $this->getFilename($shippingExport)
@@ -135,7 +136,7 @@ final class ShippingExportEventListener
             [
                 $shipmentId,
                 preg_replace('~[^A-Za-z0-9]~', '', (string) $orderNumber),
-            ]
+            ],
         );
     }
 

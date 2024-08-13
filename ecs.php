@@ -1,15 +1,12 @@
 <?php
 
-use PhpCsFixer\Fixer\ClassNotation\VisibilityRequiredFixer;
-use SlevomatCodingStandard\Sniffs\Commenting\InlineDocCommentDeclarationSniff;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\EasyCodingStandard\ValueObject\Option;
+declare(strict_types=1);
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import('vendor/sylius-labs/coding-standard/ecs.php');
-    $containerConfigurator->import('vendor/bitbag/coding-standard/ecs.php');
+use Symplify\EasyCodingStandard\Config\ECSConfig;
 
-    $containerConfigurator->parameters()->set(Option::SKIP, [
-        VisibilityRequiredFixer::class => ['*Spec.php'],
-    ]);
+return static function (ECSConfig $config): void {
+    putenv('ALLOW_BITBAG_OS_HEADER=1');
+
+    $config->import('vendor/bitbag/coding-standard/ecs.php');
+    $config->paths(['src', 'tests']);
 };

@@ -1,46 +1,39 @@
 <?php
 
+/*
+ * This file has been created by developers from BitBag.
+ * Feel free to contact us once you face any issues or want to start
+ * You can find more information about us on https://bitbag.io and write us
+ * an email on hello@bitbag.io.
+ */
+
+declare(strict_types=1);
+
 namespace Tests\BitBag\DpdPlShippingExportPlugin\Behat\Context\Ui\Admin;
 
 use Behat\Behat\Context\Context;
-use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
 use Sylius\Behat\NotificationType;
-use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 use Sylius\Behat\Service\NotificationCheckerInterface;
 use Sylius\Behat\Service\Resolver\CurrentPageResolverInterface;
-use Tests\BitBag\SyliusShippingExportPlugin\Behat\Behaviour\ContainsError;
-use Tests\BitBag\DpdPlShippingExportPlugin\Behat\Page\Admin\ShippingGateway\CreatePageInterface;
-use Webmozart\Assert\Assert;
 use Tests\BitBag\DpdPlShippingExportPlugin\Behat\Page\Admin\ShippingGateway\CreatePage;
+use Webmozart\Assert\Assert;
 
 final class ShippingGatewayContext implements Context
 {
-    /**
-     * @var CreatePage
-     */
+    /** @var CreatePage */
     private $createPage;
 
-    /**
-     * @var CurrentPageResolverInterface
-     */
+    /** @var CurrentPageResolverInterface */
     private $currentPageResolver;
 
-    /**
-     * @var NotificationCheckerInterface
-     */
+    /** @var NotificationCheckerInterface */
     private $notificationChecker;
 
-    /**
-     * @param CreatePage $createPage
-     * @param CurrentPageResolverInterface $currentPageResolver
-     * @param NotificationCheckerInterface $notificationChecker
-     */
     public function __construct(
         CreatePage $createPage,
         CurrentPageResolverInterface $currentPageResolver,
-        NotificationCheckerInterface $notificationChecker
-    )
-    {
+        NotificationCheckerInterface $notificationChecker,
+    ) {
         $this->createPage = $createPage;
         $this->currentPageResolver = $currentPageResolver;
         $this->notificationChecker = $notificationChecker;
@@ -75,7 +68,7 @@ final class ShippingGatewayContext implements Context
      */
     public function iClearTheField($field)
     {
-        $this->resolveCurrentPage()->fillField($field, "");
+        $this->resolveCurrentPage()->fillField($field, '');
     }
 
     /**
@@ -94,8 +87,8 @@ final class ShippingGatewayContext implements Context
     public function iShouldBeNotifiedThatTheShippingGatewayWasCreated()
     {
         $this->notificationChecker->checkNotification(
-            "Shipping gateway has been successfully",
-            NotificationType::success()
+            'Shipping gateway has been successfully',
+            NotificationType::success(),
         );
     }
 
