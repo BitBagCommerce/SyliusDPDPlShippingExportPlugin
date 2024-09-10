@@ -35,59 +35,25 @@ This **open-source plugin was developed to help the Sylius community**. If you h
 
 [![](https://bitbag.io/wp-content/uploads/2020/10/button-contact.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_dpdpl-shipping-export)
 
-# Installation
+## Installation
 
-```bash
-composer require bitbag/dpd-pl-shipping-export-plugin
-```
+---
+### Requirements
 
-Add plugin dependencies to your `config/bundles.php` file:
-```php
-return [
-    ...
-    
-    BitBag\DpdPlShippingExportPlugin\DpdPlShippingExportPlugin::class => ['all' => true]
-];
-```
+We work on stable, supported and up-to-date versions of packages. We recommend you to do the same.
 
-Import required config in your `config/packages/_sylius.yaml` file:
-```yaml
-imports:
-    ...
+| Package       | Version         |
+|---------------|-----------------|
+| PHP           | \>=8.0          |
+| sylius/sylius | 1.12.x - 1.13.x |
+| MySQL         | \>= 5.7         |
+| NodeJS        | \>= 18.x        |
 
-  - { resource: "@DpdPlShippingExportPlugin/Resources/config/config.yml" }
-```
+----
+### Full installation guide
+- [See the full installation guide](doc/installation.md)
 
-Import routing in your `config/routes.yaml` file:
-
-```yaml
-bitbag_shipping_export_plugin:
-  resource: "@BitBagSyliusShippingExportPlugin/Resources/config/routing.yml"
-  prefix: /admin
-```
-
-Clear application cache by using command:
-
-```bash
-bin/console cache:clear
-```
-
-Verify database schema changes:
-
-```bash
-bin/console doctrine:schema:update --dump-sql
-```
-
-Update your database schema
-
-```bash
-bin/console doctrine:schema:update --force --complete
-```
-# Usage
-### Important!
-If non-existent postal codes are provided - both in the "shipping gateway" and during the order, export of the shipment will not be possible. For the plugin to work properly, it is also necessary to add the weight of the products.
 # About us
-
 ---
 
 BitBag is a company of people who **love what they do** and do it right. We fulfill the eCommerce technology stack with **Sylius**, Shopware, Akeneo, and Pimcore for PIM, eZ Platform for CMS, and VueStorefront for PWA. Our goal is to provide real digital transformation with an agile solution that scales with the **clients’ needs**. Our main area of expertise includes eCommerce consulting and development for B2C, B2B, and Multi-vendor Marketplaces.</br>
