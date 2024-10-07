@@ -1,3 +1,12 @@
+parameters:
+    bitbag.dpd_pl.default_label_file_format: '%env(BITBAG_DPD_PL_DEFAULT_LABEL_FILE_FORMAT)%'
+    bitbag.dpd_pl.default_label_page_format: '%env(BITBAG_DPD_PL_DEFAULT_LABEL_PAGE_FORMAT)%'
+    bitbag.dpd_pl.default_label_type: '%env(BITBAG_DPD_PL_DEFAULT_LABEL_TYPE)%'
+
+    env(BITBAG_DPD_PL_DEFAULT_LABEL_FILE_FORMAT): 'PDF'
+    env(BITBAG_DPD_PL_DEFAULT_LABEL_PAGE_FORMAT): 'A4'
+    env(BITBAG_DPD_PL_DEFAULT_LABEL_TYPE): 'BIC3'
+
 imports:
   - { resource: "@BitBagSyliusShippingExportPlugin/Resources/config/config.yml" }
   - { resource: "@DpdPlShippingExportPlugin/Resources/config/services.yml" }
