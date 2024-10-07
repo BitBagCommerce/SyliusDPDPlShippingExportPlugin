@@ -26,8 +26,6 @@ final class ShippingExportEventListener
 {
     public const DPD_GATEWAY_CODE = 'dpd_pl';
 
-    public const BASE_LABEL_EXTENSION = 'pdf';
-
     private WebClientInterface $webClient;
 
     private RequestStack $requestStack;
@@ -38,18 +36,30 @@ final class ShippingExportEventListener
 
     private string $shippingLabelsPath;
 
+    private string $labelFileFormat;
+
+    private string $labelPageFormat;
+
+    private string $labelType;
+
     public function __construct(
         WebClientInterface $webClient,
         RequestStack $requestStack,
         FileSystem $fileSystem,
         ObjectManager $shippingExportManager,
         string $shippingLabelsPath,
+        string $labelFileFormat,
+        string $labelPageFormat,
+        string $labelType
     ) {
         $this->webClient = $webClient;
         $this->requestStack = $requestStack;
         $this->fileSystem = $fileSystem;
         $this->shippingExportManager = $shippingExportManager;
         $this->shippingLabelsPath = $shippingLabelsPath;
+        $this->labelFileFormat  = $labelFileFormat;
+        $this->labelPageFormat = $labelPageFormat;
+        $this->labelType = $labelType;
     }
 
     public function exportShipment(ResourceControllerEvent $exportShipmentEvent): void
@@ -87,7 +97,7 @@ final class ShippingExportEventListener
 
             $result = $dpd->sendPackage($this->webClient->getParcels(), $this->webClient->getReceiver(), 'SENDER', $this->webClient->getServices());
 
-            $speedLabel = $dpd->generateSpeedLabelsByPackageIds([$result->packageId], $this->webClient->getPickupAddress());    /** @phpstan-ignore-line */
+            $speedLabel = $dpd->generateSpeedLabelsByPackageIds([$result->packageId], $this->webClient->getPickupAddress(), 'DOMESTIC', $this->labelFileFormat, $this->labelPageFormat, $this->labelType);    /** @phpstan-ignore-line */
         } catch (Exception $exception) {
             $session->getFlashBag()->add('error', sprintf(
                 'DPD Web Service for #%s order: %s',
@@ -99,7 +109,7 @@ final class ShippingExportEventListener
         }
 
         $session->getFlashBag()->add('success', 'bitbag.ui.shipment_data_has_been_exported');
-        $this->saveShippingLabel($shippingExport, $speedLabel->filedata, self::BASE_LABEL_EXTENSION);   /** @phpstan-ignore-line */
+        $this->saveShippingLabel($shippingExport, $speedLabel->filedata, strtolower($this->labelFileFormat));   /** @phpstan-ignore-line */
         $this->markShipmentAsExported($shippingExport);
     }
 
