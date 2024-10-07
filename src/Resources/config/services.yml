@@ -12,6 +12,9 @@ services:
             - '@filesystem'
             - '@bitbag.manager.shipping_export'
             - '%bitbag.shipping_labels_path%'
+            - '%bitbag.dpd_pl.default_label_file_format%'
+            - '%bitbag.dpd_pl.default_label_page_format%'
+            - '%bitbag.dpd_pl.default_label_type%'
         tags:
             - { name: kernel.event_listener, event: 'bitbag.shipping_export.export_shipment', method: exportShipment }
 
