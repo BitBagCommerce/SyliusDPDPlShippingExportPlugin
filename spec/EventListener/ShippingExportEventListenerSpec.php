@@ -31,7 +31,16 @@ final class ShippingExportEventListenerSpec extends ObjectBehavior
         ObjectManager $objectManager
     ) {
         $shippingLabelsPath = 'labels';
-        $this->beConstructedWith($webClient, $requestStack, $filesystem, $objectManager, $shippingLabelsPath);
+        $this->beConstructedWith(
+            $webClient,
+            $requestStack,
+            $filesystem,
+            $objectManager,
+            $shippingLabelsPath,
+            'PDF',
+            'PDF',
+            'Test',
+        );
     }
 
     function it_export_shipment
