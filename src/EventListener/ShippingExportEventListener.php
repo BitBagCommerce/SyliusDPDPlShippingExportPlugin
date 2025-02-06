@@ -110,7 +110,7 @@ final class ShippingExportEventListener
 
         $session->getFlashBag()->add('success', 'bitbag.ui.shipment_data_has_been_exported');
         $this->saveShippingLabel($shippingExport, $speedLabel->filedata, strtolower($this->labelFileFormat));   /** @phpstan-ignore-line */
-        $this->markShipmentAsExported($shippingExport);
+        $this->markShipmentAsExported($shippingExport, $result->parcels[0]);
     }
 
     public function saveShippingLabel(
@@ -150,10 +150,11 @@ final class ShippingExportEventListener
         );
     }
 
-    private function markShipmentAsExported(ShippingExportInterface $shippingExport): void
+    private function markShipmentAsExported(ShippingExportInterface $shippingExport, $parcel): void
     {
         $shippingExport->setState(ShippingExportInterface::STATE_EXPORTED);
         $shippingExport->setExportedAt(new \DateTime());
+        $shippingExport->setExternalId($parcel->Waybill);
 
         $this->shippingExportManager->persist($shippingExport);
         $this->shippingExportManager->flush();
