@@ -57,7 +57,7 @@ final class ShippingExportEventListener
         $this->fileSystem = $fileSystem;
         $this->shippingExportManager = $shippingExportManager;
         $this->shippingLabelsPath = $shippingLabelsPath;
-        $this->labelFileFormat  = $labelFileFormat;
+        $this->labelFileFormat = $labelFileFormat;
         $this->labelPageFormat = $labelPageFormat;
         $this->labelType = $labelType;
     }
