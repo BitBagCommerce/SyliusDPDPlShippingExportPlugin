@@ -50,7 +50,7 @@ final class ShippingExportEventListener
         string $shippingLabelsPath,
         string $labelFileFormat,
         string $labelPageFormat,
-        string $labelType
+        string $labelType,
     ) {
         $this->webClient = $webClient;
         $this->requestStack = $requestStack;
