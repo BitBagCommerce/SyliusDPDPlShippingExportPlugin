@@ -1,2 +1,4 @@
 framework:
-    profiler: { only_exceptions: false }
+    profiler:
+        enabled: true
+        collect: true
