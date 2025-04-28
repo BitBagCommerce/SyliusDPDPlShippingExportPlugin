@@ -6,7 +6,7 @@ imports:
     - { resource: "@SyliusApiBundle/Resources/config/app/config.yaml" }
 
     - { resource: "@DpdPlShippingExportPlugin/Resources/config/config.yml" }
-d
+
 parameters:
     sylius_core.public_dir: '%kernel.project_dir%/public'
 
