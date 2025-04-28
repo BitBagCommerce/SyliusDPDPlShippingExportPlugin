@@ -10,6 +10,7 @@
 declare(strict_types=1);
 
 $bundles = [
+    Sylius\Bundle\TaxonomyBundle\SyliusTaxonomyBundle::class => ['all' => true],
     ApiPlatform\Symfony\Bundle\ApiPlatformBundle::class => ['all' => true],
     Sylius\TwigExtra\Symfony\SyliusTwigExtraBundle::class => ['all' => true],
     Sylius\TwigHooks\SyliusTwigHooksBundle::class => ['all' => true],
@@ -38,14 +39,14 @@ $bundles = [
     Sylius\Bundle\PromotionBundle\SyliusPromotionBundle::class => ['all' => true],
     Sylius\Bundle\AddressingBundle\SyliusAddressingBundle::class => ['all' => true],
     Sylius\Bundle\InventoryBundle\SyliusInventoryBundle::class => ['all' => true],
-    Sylius\Bundle\TaxonomyBundle\SyliusTaxonomyBundle::class => ['all' => true],
     Sylius\Bundle\UserBundle\SyliusUserBundle::class => ['all' => true],
     Sylius\Bundle\CustomerBundle\SyliusCustomerBundle::class => ['all' => true],
     Sylius\Bundle\UiBundle\SyliusUiBundle::class => ['all' => true],
     Sylius\Bundle\ReviewBundle\SyliusReviewBundle::class => ['all' => true],
     Sylius\Bundle\CoreBundle\SyliusCoreBundle::class => ['all' => true],
     Sylius\Bundle\ResourceBundle\SyliusResourceBundle::class => ['all' => true],
-    Sylius\Bundle\GridBundle\SyliusGridBundle::class => ['all' => true],
+    BitBag\SyliusShippingExportPlugin\BitBagSyliusShippingExportPlugin::class => ['all' => true],
+    BitBag\DpdPlShippingExportPlugin\DpdPlShippingExportPlugin::class => ['all' => true],
     Knp\Bundle\GaufretteBundle\KnpGaufretteBundle::class => ['all' => true],
     Knp\Bundle\MenuBundle\KnpMenuBundle::class => ['all' => true],
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
@@ -64,11 +65,10 @@ $bundles = [
     Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle::class => ['all' => true],
     Sylius\Bundle\ApiBundle\SyliusApiBundle::class => ['all' => true],
     SyliusLabs\DoctrineMigrationsExtraBundle\SyliusLabsDoctrineMigrationsExtraBundle::class => ['all' => true],
-    BitBag\SyliusShippingExportPlugin\BitBagSyliusShippingExportPlugin::class => ['all' => true],
-    BitBag\DpdPlShippingExportPlugin\DpdPlShippingExportPlugin::class => ['all' => true],
     League\FlysystemBundle\FlysystemBundle::class => ['all' => true],
     BabDev\PagerfantaBundle\BabDevPagerfantaBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
+    Sylius\Bundle\GridBundle\SyliusGridBundle::class => ['all' => true],
 ];
 
 if (class_exists(winzou\Bundle\StateMachineBundle\winzouStateMachineBundle::class)) {
