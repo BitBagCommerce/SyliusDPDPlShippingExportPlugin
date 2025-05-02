@@ -21,6 +21,7 @@
         "behat/behat": "^3.16",
         "behat/mink-selenium2-driver": "^1.4",
         "bitbag/coding-standard": "^3.0",
+        "captainhook/captainhook": "^5.25",
         "dmore/behat-chrome-extension": "^1.4",
         "dmore/chrome-mink-driver": "^2.9",
         "friends-of-behat/mink": "^1.11",
