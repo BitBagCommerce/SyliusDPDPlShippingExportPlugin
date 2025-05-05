@@ -7,14 +7,14 @@ services:
         arguments:
             - '@bitbag.dpd_pl_shipping_export_plugin.behat.page.admin.shipping_gateway.create'
             - '@sylius.behat.current_page_resolver'
-            - '@sylius.behat.notification_checker'
+            - '@sylius.behat.notification_checker.admin'
         tags:
             - { name: fob.context_service }
 
     bitbag.dpd_pl_shipping_export_plugin.behat.context.setup.shipping_gateway:
         class: Tests\BitBag\DpdPlShippingExportPlugin\Behat\Context\Setup\ShippingGatewayContext
         arguments:
-            - '@sylius.product_variant_resolver.default'
+            - '@sylius.resolver.product_variant.default'
             - '@sylius.repository.order'
             - '@sylius.repository.shipment'
             - '@doctrine.orm.entity_manager'
