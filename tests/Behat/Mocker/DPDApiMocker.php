@@ -12,47 +12,43 @@ declare(strict_types=1);
 namespace Tests\BitBag\DpdPlShippingExportPlugin\Behat\Mocker;
 
 use BitBag\DpdPlShippingExportPlugin\Api\SoapClientInterface;
-use Sylius\Behat\Service\Mocker\MockerInterface;
+use Mockery;
 
 class DPDApiMocker
 {
-    /** @var MockerInterface */
-    private $mocker;
+    private $mockedSoapClient;
 
-    /**
-     * DPDApiMocker constructor.
-     */
-    public function __construct(MockerInterface $mocker)
+    public function __construct(SoapClientInterface $soapClient)
     {
-        $this->mocker = $mocker;
+        $this->mockedSoapClient = Mockery::mock($soapClient);
     }
 
-    public function performActionInApiSuccessfulScope(callable $action)
+    public function performActionInApiSuccessfulScope(callable $action): void
     {
         $this->mockApiSuccessfulDPDResponse();
         $action();
-        $this->mocker->unmockAll();
+        $this->resetMocks();
     }
 
-    private function mockApiSuccessfulDPDResponse()
+    private function mockApiSuccessfulDPDResponse(): void
     {
-        $createShipmentResult = (object) [
-            'createShipmentResult' => (object) [
-                'label' => (object) [
+        $createShipmentResult = (object)[
+            'createShipmentResult' => (object)[
+                'label' => (object)[
                     'labelContent' => 'test',
                     'labelType' => 't',
                 ],
             ],
         ];
 
-        $this
-            ->mocker
-            ->mockService(
-                'bitbag.dpd_pl_shipping_export_plugin.api.soap_client',
-                SoapClientInterface::class,
-            )
+        $this->mockedSoapClient
             ->shouldReceive('createShipment')
-            ->andReturn($createShipmentResult)
-        ;
+            ->once()
+            ->andReturn($createShipmentResult);
+    }
+
+    private function resetMocks(): void
+    {
+        Mockery::close();
     }
 }
