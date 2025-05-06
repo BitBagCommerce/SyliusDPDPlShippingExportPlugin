@@ -22,7 +22,7 @@ We work on stable, supported and up-to-date versions of packages. We recommend y
 
 ## Composer:
 ```bash
-composer require bitbag/dpd-pl-shipping-export-plugin
+composer require bitbag/dpd-pl-shipping-export-plugin --no-scripts
 ```
 
 ## Basic configuration:
@@ -57,10 +57,6 @@ bitbag_shipping_export_plugin:
 ```
 
 ### Update your database
-First, please run legacy-versioned migrations by using command:
-```bash
-bin/console doctrine:migrations:migrate
-```
 
 After migration, please create a new diff migration and update database:
 ```bash
