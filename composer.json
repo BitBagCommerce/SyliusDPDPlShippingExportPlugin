@@ -19,7 +19,7 @@
     },
     "require-dev": {
         "behat/behat": "^3.16",
-        "behat/mink-selenium2-driver": "^1.4",
+        "behat/mink-selenium2-driver": "^1.7",
         "bitbag/coding-standard": "^3.0",
         "captainhook/captainhook": "^5.25",
         "dmore/behat-chrome-extension": "^1.4",
