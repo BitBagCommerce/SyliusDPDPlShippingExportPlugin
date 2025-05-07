@@ -18,8 +18,8 @@
         "symfony/webpack-encore-bundle": "^2.2.0"
     },
     "require-dev": {
-        "behat/behat": "^3.22",
-        "behat/mink-selenium2-driver": "^1.3",
+        "behat/behat": "^3.14",
+        "behat/mink-selenium2-driver": "~1.6",
         "bitbag/coding-standard": "^3.0",
         "captainhook/captainhook": "^5.25",
         "dmore/behat-chrome-extension": "^1.4",
@@ -53,6 +53,9 @@
         "symfony/intl": "^6.4 || ^7.1",
         "symfony/stopwatch": "^6.4",
         "symfony/web-profiler-bundle": "^6.4 || ^7.1"
+    },
+    "conflict": {
+        "behat/mink-selenium2-driver": ">=1.7.0"
     },
     "config": {
         "sort-packages": true,
