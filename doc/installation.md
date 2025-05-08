@@ -20,6 +20,14 @@ We work on stable, supported and up-to-date versions of packages. We recommend y
 | MySQL         | \>= 8.0        |
 | NodeJS        | \>= 20.x, 22.x |
 
+## CONFLICTS
+As described in sylius/sylius-standard:2.0 (see CONFLICTS.md file) there is incompatibility  
+between version of `behat/mink-selenium2-driver` used in Sylius 2.0 and this plugin.
+
+Before startig the plugin installation, it is necessary to downgrade in `composer.json` version    
+of `behat/mink-selenium2-driver` to `~1.6.0` and run `composer update behat/mink-selenium2-driver`.
+
+
 ## Composer:
 ```bash
 composer require bitbag/dpd-pl-shipping-export-plugin --no-scripts
