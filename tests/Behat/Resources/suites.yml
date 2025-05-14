@@ -19,7 +19,7 @@ default:
 
                 - bitbag.dpd_pl_shipping_export_plugin.behat.context.ui.admin.shipping_gateway
             filters:
-                tags: "@managing_shipping_gateway_dpd && @ui"
+                tags: "@managing_shipping_gateway_dpd&&@ui"
         managing_shipping_export_dpd:
             contexts:
                 - sylius.behat.context.hook.doctrine_orm
@@ -51,4 +51,4 @@ default:
                 - bitbag.behat.context.ui.admin.shipping_export
                 - bitbag.dpd_pl_shipping_export_plugin.behat.context.ui.admin.shipping_export
             filters:
-                tags: "@managing_shipping_export_dpd && @ui"
+                tags: "@managing_shipping_export_dpd&&@ui"
