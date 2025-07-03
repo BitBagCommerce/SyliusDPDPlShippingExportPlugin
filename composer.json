@@ -14,7 +14,7 @@
         "ext-soap": "*",
         "bitbag/shipping-export-plugin": "^4.0",
         "msztorc/php-dpd-api": "^2.1",
-        "sylius/sylius": "~2.0.0",
+        "sylius/sylius": "^2.0",
         "symfony/webpack-encore-bundle": "^2.2.0"
     },
     "require-dev": {
