@@ -18,10 +18,10 @@ use Tests\BitBag\SyliusShippingExportPlugin\Behat\Page\Admin\ShippingExport\Inde
 final class ShippingExportContext implements Context
 {
     /** @var IndexPageInterface */
-    private $indexPage;
+    private IndexPageInterface $indexPage;
 
     /** @var DPDApiMocker */
-    private $DPDApiMocker;
+    private DPDApiMocker $DPDApiMocker;
 
     public function __construct(
         IndexPageInterface $indexPage,
@@ -34,7 +34,7 @@ final class ShippingExportContext implements Context
     /**
      * @When I export all new shipments to dpd api
      */
-    public function iExportAllNewShipments()
+    public function iExportAllNewShipments(): void
     {
         $this->DPDApiMocker->performActionInApiSuccessfulScope(function (): void {
             $this->indexPage->exportAllShipments();
@@ -44,7 +44,7 @@ final class ShippingExportContext implements Context
     /**
      * @When I export first shipment to dpd api
      */
-    public function iExportFirsShipments()
+    public function iExportFirsShipments(): void
     {
         $this->DPDApiMocker->performActionInApiSuccessfulScope(function (): void {
             $this->indexPage->exportFirsShipment();
