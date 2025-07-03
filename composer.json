@@ -16,7 +16,7 @@
         "msztorc/php-dpd-api": "^2.1",
         "sylius/sylius": "^2.0",
         "symfony/webpack-encore-bundle": "^2.2.0",
-        "gedmo/doctrine-extensions": "3.16"
+        "gedmo/doctrine-extensions": "3.17.1"
     },
     "require-dev": {
         "behat/behat": "^3.14",
